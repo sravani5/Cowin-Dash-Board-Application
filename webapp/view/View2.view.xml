@@ -1,0 +1,80 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="cowinappZCowinApp.controller.View2"
+	xmlns:html="http://www.w3.org/1999/xhtml" xmlns:microchart="sap.suite.ui.microchart">
+	<Page title="Dash Board" showNavButton="true" navButtonPress="onBackBtnPress">
+		<content>
+			<HBox class="sapUiSmallMarginTop" justifyContent="Center">
+				<HBox>
+					<Label text="State:" design="Bold" class="sapUiSmallMarginTop"/>
+					<select class="sapUiSmallMarginEnd sapUiTinyMarginBegin" width="15rem" items="{data>/states}" forceSelection="false"
+						change="onStateSelectChange">
+						<core:ListItem text="{data>state_name}" key="{data>state_id}"/>
+					</select>
+				</HBox>
+				<HBox>
+					<Label text="City:" design="Bold" class="sapUiSmallMarginTop"/>
+					<select class="sapUiSmallMarginEnd sapUiTinyMarginBegin" width="15rem" items="{data>/districts}" forceSelection="false"
+						change="onDistrictSelectchange">
+						<core:ListItem text="{data>district_name}" key="{data>district_id}"/>
+					</select>
+				</HBox>
+				<HBox>
+					<Button text="search" press="onSearch" class="sapUiSmallMarginBegin"/>
+				</HBox>
+			</HBox>
+			<VBox>
+				<GenericTile class="sapUiLargeMarginBegin sapUiSmallMarginTop" header="Total Centers for" subheader="Vaccination" press="onPressTile"
+					frameType="Auto">
+					<TileContent unit="{data>/TileData/city}" footer="{data>/TileData/state}">
+						<NumericContent valueColor="Good" value="{data>/TileData/total_centers}" icon="sap-icon://accidental-leave" withMargin="false"/>
+					</TileContent>
+				</GenericTile>
+				<microchart:InteractiveBarChart labelWidth="15%" selectionChanged="onBarSelect">
+					<microchart:bars>
+						<microchart:InteractiveBarChartBar id="idMicrocharts" label="Age 45+" value="{data>/ChartData/ageLimit45}" color="Neutral"/>
+						<microchart:InteractiveBarChartBar id="idMicrocharts1" label="Age 18+" value="{data>/ChartData/ageLimit18}" color="Neutral"/>
+						<!-- <microchart:InteractiveBarChartBar label="Product 3" value="70"/> -->
+					</microchart:bars>
+				</microchart:InteractiveBarChart>
+			</VBox>
+			<Table id="table" items="{data>/center_data}">
+				<columns>
+					<Column>
+						<Label text="Center Name" design="Bold"/>
+					</Column>
+					<Column>
+						<Label text="Age Group" design="Bold"/>
+					</Column>
+					<Column>
+						<Label text="Vaccine" design="Bold"/>
+					</Column>
+					<Column>
+						<Label text="Available Dose 1" design="Bold"/>
+					</Column>
+					<Column>
+						<Label text="Available Dose 2" design="Bold"/>
+					</Column>
+					<Column>
+						<Label text="Block" design="Bold"/>
+					</Column>
+					<Column>
+						<Label text="Pin Code" design="Bold"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{data>name}"/>
+							<Text text="{data>min_age_limit}"/>
+							<Text text="{data>vaccine}"/>
+							<Text text="{data>available_capacity_dose1}"/>
+							<Text text="{data>available_capacity_dose2}"/>
+							<Text text="{data>block_name}"/>
+							<Text text="{data>pincode}"/>
+							<!--<Text text="{data>}"/>-->
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+		</content>
+	</Page>
+</mvc:View>

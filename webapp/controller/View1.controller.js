@@ -92,6 +92,9 @@ sap.ui.define([
 			sPincode = oViewModel.getProperty("/sPincode");
 			sFlag = oViewModel.getProperty("/isSelect");
 			
+		},
+		onPressDetailData : function(){
+		this.oRouter.navTo("view2");
 		}
 	});
 });

@@ -40,7 +40,11 @@
 	"sap.ui5": {
 		"rootView": {
 			"viewName": "cowinappZCowinApp.view.View1",
-			"type": "XML"
+			"type": "XML",
+			"controlAggregation": "pages",
+			"controlId": "app",
+			"async": true,
+			"clearControlAggregation": false
 		},
 		"dependencies": {
 			"minUI5Version": "1.30.0",
@@ -73,6 +77,41 @@
 			"css": [{
 				"uri": "css/style.css"
 			}]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"async": true,
+				"viewPath": "cowinappZCowinApp.view",
+				"controlAggregation": "pages",
+				"controlId": "app",
+				"clearControlAggregation": false
+			},
+			"routes": [{
+				"name": "view1",
+				"pattern": "",
+				"target": ["view1"]
+			}, {
+				"name": "view2",
+				"pattern": "view2",
+				"target": ["view2"]
+
+			}],
+			"targets": {
+				"view1": {
+					"viewType": "XML",
+					"transition": "slide",
+					"viewName": "View1",
+					"clearControlAggregation": false
+				},
+				"view2": {
+					"viewType": "XML",
+					"transition": "slide",
+					"viewName": "View2",
+					"clearControlAggregation": false
+				}
+			}
 		}
 	}
 }
