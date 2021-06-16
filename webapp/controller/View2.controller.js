@@ -1,12 +1,13 @@
 sap.ui.define([
+	"cowinappZCowinApp/controller/BaseController",
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ui/export/Spreadsheet"
-], function(Controller, Filter, FilterOperator, Spreadsheet) {
+], function(BaseController,Controller, Filter, FilterOperator, Spreadsheet) {
 	"use strict";
 
-	return Controller.extend("cowinappZCowinApp.controller.View2", {
+	return BaseController.extend("cowinappZCowinApp.controller.View2", {
 
 		/**
 		 * Called when a controller is instantiated and its View controls (if available) are already created.
@@ -22,16 +23,16 @@ sap.ui.define([
 			this.oRouter.navTo("view1");
 		},
 		_onRouteMatched: function() {
-			this.GetDataByDist();
+			this.GetDataByDist(1);
 		},
-		GetDataByDist: function() {
+		GetDataByDist: function(disId) {
 			var that = this;
 			var oDate = new Date();
 			var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
 				pattern: "dd-MM-YYYY"
 			});
 			var dateFormatted = dateFormat.format(oDate);
-			$.ajax("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + 4 + "&date=" + dateFormatted, {
+			$.ajax("https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=" + disId + "&date=" + dateFormatted, {
 				type: 'GET',
 				success: function(data) {
 					if (data.sessions.length === 0) {
@@ -113,7 +114,7 @@ sap.ui.define([
 				oTabData = this.getOwnerComponent().getModel("data").getProperty(sPtah);
 			var aCols, oSettings, oSheet, oExcelJson = [];
 			aCols = this.createColumnConfig();
-			$.each(aContexts, function(i,cntx) {
+			$.each(aContexts, function(i, cntx) {
 				var obj = cntx.getObject();
 				var newModel = {
 					"name": obj.name,
@@ -139,6 +140,10 @@ sap.ui.define([
 			}).finally(function() {
 				oSheet.destroy()
 			});
+		},
+		onDistrictSelect : function(oEvnt){
+			var oSelDistId = oEvnt.getSource().getSelectedKey();
+			this.GetDataByDist(oSelDistId);
 		}
 
 		/**

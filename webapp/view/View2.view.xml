@@ -13,21 +13,18 @@
 				<HBox>
 					<Label text="City:" design="Bold" class="sapUiSmallMarginTop"/>
 					<select class="sapUiSmallMarginEnd sapUiTinyMarginBegin" width="15rem" items="{data>/districts}" forceSelection="false"
-						change="onDistrictSelectchange">
+						change="onDistrictSelect">
 						<core:ListItem text="{data>district_name}" key="{data>district_id}"/>
 					</select>
 				</HBox>
-				<HBox>
-					<Button text="search" press="onSearch" class="sapUiSmallMarginBegin"/>
-				</HBox>
 			</HBox>
+			<GenericTile class="sapUiLargeMarginBegin sapUiSmallMarginTop" header="Total Centers for" subheader="Vaccination" press="onPressTile"
+				frameType="Auto">
+				<TileContent unit="{data>/TileData/city}" footer="{data>/TileData/state}">
+					<NumericContent valueColor="Good" value="{data>/TileData/total_centers}" icon="sap-icon://accidental-leave" withMargin="false"/>
+				</TileContent>
+			</GenericTile>
 			<VBox>
-				<GenericTile class="sapUiLargeMarginBegin sapUiSmallMarginTop" header="Total Centers for" subheader="Vaccination" press="onPressTile"
-					frameType="Auto">
-					<TileContent unit="{data>/TileData/city}" footer="{data>/TileData/state}">
-						<NumericContent valueColor="Good" value="{data>/TileData/total_centers}" icon="sap-icon://accidental-leave" withMargin="false"/>
-					</TileContent>
-				</GenericTile>
 				<microchart:InteractiveBarChart labelWidth="15%" selectionChanged="onBarSelect">
 					<microchart:bars>
 						<microchart:InteractiveBarChartBar id="idMicrocharts" label="Age 45+" value="{data>/ChartData/ageLimit45}" color="Neutral"/>
@@ -39,8 +36,8 @@
 			<Table id="table" items="{data>/center_data}">
 				<headerToolbar>
 					<Toolbar>
-					<ToolbarSpacer/>
-					<Button icon="sap-icon://excel-attachment" press="onExportDownload"/>
+						<ToolbarSpacer/>
+						<Button icon="sap-icon://excel-attachment" press="onExportDownload"/>
 					</Toolbar>
 				</headerToolbar>
 				<columns>

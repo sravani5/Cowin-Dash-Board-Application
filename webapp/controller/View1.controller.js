@@ -1,11 +1,12 @@
 sap.ui.define([
+	"cowinappZCowinApp/controller/BaseController",
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/json/JSONModel",
 	"sap/m/MessageToast"
-], function(Controller, JSONModel, MessageToast) {
+], function(BaseController, Controller, JSONModel, MessageToast) {
 	"use strict";
 
-	return Controller.extend("cowinappZCowinApp.controller.View1", {
+	return BaseController.extend("cowinappZCowinApp.controller.View1", {
 		onInit: function() {
 			this.oRouter = this.getOwnerComponent().getRouter();
 			this._onLoadStates();
@@ -17,8 +18,8 @@ sap.ui.define([
 				isSelect: false,
 				sSelState: "",
 				sSelCity: "",
-				sPincode : "",
-				dateValue : new Date()
+				sPincode: "",
+				dateValue: new Date()
 			});
 			this.getView().setModel(oViewModel, "oViewModel");
 		},
@@ -47,54 +48,41 @@ sap.ui.define([
 			});
 			this.getAllIndiaCovidData();
 		},
-		getAllIndiaCovidData : function(){
+		getAllIndiaCovidData: function() {
 			var oViewModel = this.getView().getModel("oViewModel");
 			var that = this;
 			$.ajax("https://api.cowin.gov.in/api/v1/reports/v2/getPublicReports", {
 				type: 'GET',
 				success: function(data) {
-					
+
 					that.getOwnerComponent().getModel("data").setProperty("/allIndia", data);
 					that.getOwnerComponent().getModel("data").setProperty("/timeWiseDataToday", data.vaccinationDoneByTime);
-					
+
 				},
 				error: function(oErr) {
-					
+
 					MessageToast.show("Failed to Load Data");
 				}
 			});
 		},
-		onStateSelectChange: function(oEvnt) {
-			var oViewModel = this.getView().getModel("oViewModel");
-			var sKey = oEvnt.getParameter("selectedItem").getKey();
-			oViewModel.setProperty("/sSelState", sKey);
-			var that = this;
-			$.ajax("https://cdn-api.co-vin.in/api/v2/admin/location/districts/" + sKey, {
-				type: 'GET',
-				success: function(data) {
-					that.getOwnerComponent().getModel("data").setProperty("/districts", data.districts);
-				},
-				error: function(oErr) {
-					MessageToast.show("Error Occured");
-				}
-			});
-		},
+	
 		onDistrictSelectchange: function(oEvnt) {
 			var oViewModel = this.getView().getModel("oViewModel");
 			var sKey = oEvnt.getParameter("selectedItem").getKey();
 			oViewModel.setProperty("/sSelCity", sKey);
 		},
-		onSearch : function(){
-			var oViewModel = this.getView().getModel("oViewModel"),oDate ,sState,sCity ,sPincode,sFlag;
+		onSearch: function() {
+			var oViewModel = this.getView().getModel("oViewModel"),
+				oDate, sState, sCity, sPincode, sFlag;
 			oDate = oViewModel.getProperty("/dateValue");
 			sState = oViewModel.getProperty("/sSelState");
 			sCity = oViewModel.getProperty("/sSelCity");
 			sPincode = oViewModel.getProperty("/sPincode");
 			sFlag = oViewModel.getProperty("/isSelect");
-			
+
 		},
-		onPressDetailData : function(){
-		this.oRouter.navTo("view2");
+		onPressDetailData: function() {
+			this.oRouter.navTo("view2");
 		}
 	});
 });
