@@ -37,6 +37,12 @@
 				</microchart:InteractiveBarChart>
 			</VBox>
 			<Table id="table" items="{data>/center_data}">
+				<headerToolbar>
+					<Toolbar>
+					<ToolbarSpacer/>
+					<Button icon="sap-icon://excel-attachment" press="onExportDownload"/>
+					</Toolbar>
+				</headerToolbar>
 				<columns>
 					<Column>
 						<Label text="Center Name" design="Bold"/>

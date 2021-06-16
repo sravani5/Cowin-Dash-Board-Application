@@ -2,7 +2,8 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-], function(Controller, Filter, FilterOperator) {
+	"sap/ui/export/Spreadsheet"
+], function(Controller, Filter, FilterOperator, Spreadsheet) {
 	"use strict";
 
 	return Controller.extend("cowinappZCowinApp.controller.View2", {
@@ -78,6 +79,66 @@ sap.ui.define([
 				var oFilter = new Filter("min_age_limit", FilterOperator.EQ, 45);
 			}
 			oTable.getBinding("items").filter(oFilter);
+		},
+		createColumnConfig: function() {
+			return [{
+				label: "Center Name",
+				property: "name"
+			}, {
+				label: "Age Group",
+				property: "min_age_limit"
+			}, {
+				label: "Vaccine",
+				property: "vaccine"
+			}, {
+				label: "Available Dose 1",
+				property: "available_capacity_dose1"
+			}, {
+				label: "Available Dose 2",
+				property: "available_capacity_dose2"
+			}, {
+				label: "Block",
+				property: "block_name"
+			}, {
+				label: "Pincode",
+				property: "pincode"
+			}];
+		},
+
+		onExportDownload: function() {
+			var oTable = this.getView().byId("table"),
+				aItems = oTable.getBinding("items"),
+				aContexts = aItems.getCurrentContexts(),
+				sPtah = oTable.getBindingInfo("items").path,
+				oTabData = this.getOwnerComponent().getModel("data").getProperty(sPtah);
+			var aCols, oSettings, oSheet, oExcelJson = [];
+			aCols = this.createColumnConfig();
+			$.each(aContexts, function(i,cntx) {
+				var obj = cntx.getObject();
+				var newModel = {
+					"name": obj.name,
+					"min_age_limit": obj.min_age_limit,
+					"vaccine": obj.vaccine,
+					"available_capacity_dose1": obj.available_capacity_dose1,
+					"available_capacity_dose2": obj.available_capacity_dose2,
+					"block_name": obj.block_name,
+					"pincode": obj.pincode
+				}
+				oExcelJson.push(newModel);
+			});
+
+			oSettings = {
+				workbook: {
+					columns: aCols
+				},
+				dataSource: oExcelJson
+			};
+			oSheet = new Spreadsheet(oSettings);
+			oSheet.build().then(function() {
+				sap.m.MessageToast.show("Spread Sheet has finished")
+			}).finally(function() {
+				oSheet.destroy()
+			});
 		}
 
 		/**
